@@ -1,6 +1,10 @@
 # Feed My WLED
 A Python script that transforms an audio stream to feed WLED over the air using its audio-reactive feature.
 
+# Running the project on Linux
+Here is the command to take the current monitor of the output and pipe it into the script
+`MONITOR="$(pactl info | sed -n 's/^Default Sink: //p').monitor"; ffmpeg -hide_banner -loglevel warning -f pulse -i "$MONITOR" -ac 1 -ar 88200 -f s16le - | python3 feed_my_wled.py`
+
 ## Why?
 Version 0.15 ("Kösen") of [WLED](https://github.com/Aircoookie/WLED.git) comes with a built-in audio-reactive feature, which was previously a fork. But how can you use it? At first glance, all I found was usage via analog/digital microphones or wired add-ons. Really? That was never an option for me because I don’t want background noise displayed on my LED strip, and I’m certainly not going to lay another cable around the room. After digging into the source code, it turns out WLED accepts specialized UDP packets (WARSL2 Protocol). On Windows, you may use this: [WledSRServer](https://github.com/Victoare/SR-WLED-audio-server-win). But what if you use Mac or Linux? That’s why I created this script, which can be fed with an audio stream and outputs the right data as a network UDP stream to your WLED strip.
 
